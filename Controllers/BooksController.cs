@@ -14,6 +14,8 @@ public class BooksController : ControllerBase
 	public BookAuthorRepository BookAuthorsRepository { get; }
 	public GenreRepository GenreRepository { get; }
 	public ImageRepository ImageRepository { get; }
+	public PublisherRepository PublisherRepository { get; }
+	public AuthorRepository AuthorRepository { get; }
 	public OpenLibraryService OpenLibraryService { get; }
 
    public BooksController(ILogger<BooksController> logger, 
@@ -21,6 +23,8 @@ public class BooksController : ControllerBase
 						  BookAuthorRepository bookAuthorsRepository,
 						  GenreRepository genreRepository,
 						  ImageRepository imageRepository,
+						  PublisherRepository publisherRepository,
+						  AuthorRepository authorRepository,
 					      OpenLibraryService openLibraryService)
 	{
 		_logger = logger;
@@ -29,6 +33,8 @@ public class BooksController : ControllerBase
 		this.GenreRepository = genreRepository;
 		this.ImageRepository = imageRepository;
 		this.OpenLibraryService = openLibraryService;
+		this.AuthorRepository = authorRepository;
+		this.PublisherRepository = publisherRepository;
 	}
 
 	[HttpGet]
@@ -157,13 +163,31 @@ public class BooksController : ControllerBase
 		}
 	}
 
+
+
 	[HttpGet]
-	[Route("genres")]
-	public IActionResult GetAllGenres()
+	[Route("publishers")]
+	public IActionResult GetAllPublishers()
 	{
 		try
 		{
-			var result = this.GenreRepository.GetAll();
+			var result = this.PublisherRepository.GetAll();
+
+			return Ok(result);
+		}
+		catch (Exception ex)
+		{
+			return BadRequest(ex.InnerException?.Message ?? ex.Message);
+		}
+	}
+
+	[HttpGet]
+	[Route("authors")]
+	public IActionResult GetAllAuthors()
+	{
+		try
+		{
+			var result = this.AuthorRepository.GetAll();
 
 			return Ok(result);
 		}

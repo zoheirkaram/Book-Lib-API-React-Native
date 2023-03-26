@@ -18,5 +18,11 @@ namespace BookLib.Repositories
             return this._context.Genres.ToList();
         }
 
+        public int AddBook(Genre genre)
+        {
+            this._context.Genres.Add(genre);
+
+            return this._context.SaveChanges();
+        }
     }
 }

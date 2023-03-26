@@ -30,6 +30,8 @@ namespace BookLib
 			services.AddScoped<BookAuthorRepository>();
 			services.AddScoped<GenreRepository>();
 			services.AddScoped<ImageRepository>();
+			services.AddScoped<PublisherRepository>();
+			services.AddScoped<AuthorRepository>();
 			services.AddScoped<OpenLibraryService>();
 		}
 
