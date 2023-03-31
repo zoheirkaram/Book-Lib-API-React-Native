@@ -4,24 +4,23 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookLib.Controllers
 {
-	[Route("api/genres")]
+	[Route("api/authors")]
 	[ApiController]
-	public class GenreController : ControllerBase
+	public class AuthorController : ControllerBase
 	{
+		public AuthorRepository AuthorRepository { get; set; }
 
-		public GenreRepository GenreRepository { get; }
-
-        public GenreController(GenreRepository genreRepository)
+        public AuthorController(AuthorRepository authorRepository)
         {
-            this.GenreRepository = genreRepository;
+            this.AuthorRepository = authorRepository;
         }
 
-        [HttpGet]
-		public IActionResult GetAllGenres()
+		[HttpGet]
+		public IActionResult GetAllAuthors()
 		{
 			try
 			{
-				var result = this.GenreRepository.GetAll();
+				var result = this.AuthorRepository.GetAll();
 
 				return Ok(result);
 			}
@@ -32,11 +31,11 @@ namespace BookLib.Controllers
 		}
 
 		[HttpPut]
-		public IActionResult AddGenre(Genre genre)
+		public IActionResult AddAuthor(Author author)
 		{
 			try
 			{
-				var result = this.GenreRepository.AddGenre(genre);
+				var result = this.AuthorRepository.AddAuthor(author);
 
 				return Ok(result);
 			}

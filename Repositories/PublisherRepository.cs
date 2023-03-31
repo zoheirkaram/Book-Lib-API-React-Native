@@ -16,5 +16,14 @@ namespace BookLib.Repositories
         {
             return this._context.Publishers.ToList();
         }
+
+        public int AddPublisher(Publisher publisher)
+        {
+			this._context.Publishers.Add(publisher);
+
+			this._context.SaveChanges();
+
+			return publisher.PublisherId;
+		}
     }
 }

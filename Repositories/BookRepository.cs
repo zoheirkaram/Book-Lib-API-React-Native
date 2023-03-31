@@ -53,9 +53,19 @@ namespace BookLib.Repositories
 		{
 			this._context.Books.Add(book);
 
-			var result = this._context.SaveChanges();
+			this._context.SaveChanges();
 
-			return result;
+			var authorBook = new BookAuthor()
+			{
+				BookId = book.BookId,
+				AuthorId = book.AuthorId
+			};
+
+			this._context.BookAuthors.Add(authorBook);
+
+			this._context.SaveChanges();
+
+			return book.BookId;
 		}
 
 		public bool Update(Book book)

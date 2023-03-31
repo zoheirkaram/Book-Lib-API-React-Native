@@ -12,29 +12,20 @@ public class BooksController : ControllerBase
 	private readonly ILogger<BooksController> _logger;
 	public BookRepository BookRepository { get; }
 	public BookAuthorRepository BookAuthorsRepository { get; }
-	public GenreRepository GenreRepository { get; }
 	public ImageRepository ImageRepository { get; }
-	public PublisherRepository PublisherRepository { get; }
-	public AuthorRepository AuthorRepository { get; }
 	public OpenLibraryService OpenLibraryService { get; }
 
    public BooksController(ILogger<BooksController> logger, 
 						  BookRepository booksRepository, 
 						  BookAuthorRepository bookAuthorsRepository,
-						  GenreRepository genreRepository,
 						  ImageRepository imageRepository,
-						  PublisherRepository publisherRepository,
-						  AuthorRepository authorRepository,
 					      OpenLibraryService openLibraryService)
 	{
 		_logger = logger;
 		this.BookRepository = booksRepository;
 		this.BookAuthorsRepository = bookAuthorsRepository;
-		this.GenreRepository = genreRepository;
 		this.ImageRepository = imageRepository;
 		this.OpenLibraryService = openLibraryService;
-		this.AuthorRepository = authorRepository;
-		this.PublisherRepository = publisherRepository;
 	}
 
 	[HttpGet]
@@ -154,40 +145,6 @@ public class BooksController : ControllerBase
 		try
 		{
 			var result = this.BookAuthorsRepository.GetBookListByGenreId(genreId);
-
-			return Ok(result);
-		}
-		catch (Exception ex)
-		{
-			return BadRequest(ex.InnerException?.Message ?? ex.Message);
-		}
-	}
-
-
-
-	[HttpGet]
-	[Route("publishers")]
-	public IActionResult GetAllPublishers()
-	{
-		try
-		{
-			var result = this.PublisherRepository.GetAll();
-
-			return Ok(result);
-		}
-		catch (Exception ex)
-		{
-			return BadRequest(ex.InnerException?.Message ?? ex.Message);
-		}
-	}
-
-	[HttpGet]
-	[Route("authors")]
-	public IActionResult GetAllAuthors()
-	{
-		try
-		{
-			var result = this.AuthorRepository.GetAll();
 
 			return Ok(result);
 		}
