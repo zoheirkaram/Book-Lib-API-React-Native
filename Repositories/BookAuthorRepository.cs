@@ -2,6 +2,7 @@
 using BookLib.Entities;
 using BookLib.Contracts;
 using Microsoft.EntityFrameworkCore;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BookLib.Repositories
 {
@@ -28,18 +29,35 @@ namespace BookLib.Repositories
 			return bookList.ToList();
 		}
 
-		public List<BookAuthor> GetBookAuthorsByGenreId(int genreId)
+		public List<BookData> SearchBooks(string searchTerm)
 		{
-			var bookAuthorsList = this._context.BookAuthors
-							.Include(ba => ba.Book)
-								.ThenInclude(b => b.Genre)
-							.Include(ba => ba.Book)
-								.ThenInclude(b => b.Publisher)
-							.Include(ba => ba.Author)
-							.Where(ba => ba.Book.GenreId == genreId);
-							
+			var result = new List<BookData>();
+			var books = this._context.BookAuthors
+						.Include(b => b.Book)
+						.Include(a => a.Author)
+						.Where(ba => ba.Book.Title.Contains(searchTerm) || ba.Author.Name.Contains(searchTerm))
+						.Select(ba => ba.Book)
+						.ToList();
 
-			return bookAuthorsList.ToList();
+			if (books.Any())
+			{
+				foreach (var book in books)
+				{
+					var authors = this._context.BookAuthors.Where(ba => ba.BookId == book.BookId).Select(r => r.Author).ToList();
+					var images = this._context.Images.Where(i => i.BookId == book.BookId).ToList();
+
+					result.Add(new BookData()
+					{
+						BookDataId = book.BookId,
+						Book = book,
+						Authors = authors,
+						Images = images
+					});
+
+				}
+			}
+
+			return result;
 		}
 
 		public List<BookData> GetBookListByGenreId(int genreId)

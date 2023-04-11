@@ -44,6 +44,22 @@ public class BooksController : ControllerBase
 	}
 
 	[HttpGet]
+	[Route("search/{searchTerm}")]
+	public IActionResult GetBooksBySearchTerm([FromRoute] string searchTerm)
+	{
+		try
+		{
+			var result = this.BookAuthorsRepository.SearchBooks(searchTerm);
+
+			return Ok(result);
+		}
+		catch (Exception ex)
+		{
+			return BadRequest(ex.InnerException?.Message ?? ex.Message);
+		}
+	}
+
+	[HttpGet]
 	[Route("{bookId}")]
 	public IActionResult Get([FromRoute] int bookId)
 	{
@@ -93,7 +109,7 @@ public class BooksController : ControllerBase
 
 
 	[HttpPut]
-	public IActionResult AddBook(Book book)
+	public IActionResult AddBook([FromBody] Book book)
 	{
 		try
 		{
