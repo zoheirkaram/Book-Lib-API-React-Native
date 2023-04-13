@@ -34,6 +34,9 @@ namespace BookLib.Repositories
 			var result = new List<BookData>();
 			var books = this._context.BookAuthors
 						.Include(b => b.Book)
+						.ThenInclude(b => b.Genre)
+						.Include(ba => ba.Book)
+						.ThenInclude(b => b.Publisher)
 						.Include(a => a.Author)
 						.Where(ba => ba.Book.Title.Contains(searchTerm) || ba.Author.Name.Contains(searchTerm))
 						.Select(ba => ba.Book)
